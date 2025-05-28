@@ -1,0 +1,57 @@
+# PowerShell specific
+*.ps1xml
+*.psc1
+*.psd1
+*.pssc
+*.psm1
+*.ps1
+!scripts/*.ps1
+
+# Logs
+logs/
+*.log
+C:/Scripts/Logs/
+
+# Environment specific
+.env
+*.env
+config.local.ps1
+
+# IDE specific
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*~
+
+# Secret files
+*.key
+*.pem
+*.pfx
+*.p12
+*.cer
+*.crt
+*.der
+*.p7b
+*.p7c
+*.p7s
+*.p8
+*.p8e
+*.p8s
+*.p8k
+*.p8m
+*.p8s
+*.p8t
+*.p8x
+*.p8y
+*.p8z 
