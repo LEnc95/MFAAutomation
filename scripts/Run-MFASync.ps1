@@ -339,7 +339,35 @@ function Export-DataFile {
 Initialize-Logging
 
 #=====================
-# 2) WORKDAY CONFIG
+# 2) SECRET SERVER FUNCTIONS
+#=====================
+function Get-SecretServerSecretDetails {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory=$true)]
+        [int]$SecretID,
+        [Parameter(Mandatory=$false)]
+        [string]$SecretServerName = 'creds.gianteagle.com',
+        [switch]$TLS12
+    )
+
+    if ($TLS12) {
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+    }
+
+    $BaseURL = "https://$SecretServerName/SecretServer/winauthwebservices/api/v1/secrets"
+    $Arglist = @{
+        Uri = "$BaseURL/$SecretID"
+        UseDefaultCredentials = $true
+    }
+
+    Write-Log "Retrieving secret details from Secret Server..."
+    $SecretDetails = Invoke-RestMethod @Arglist
+    return $SecretDetails
+}
+
+#=====================
+# 3) WORKDAY CONFIG
 #=====================
 # Get Workday credentials from Secret Server
 $workdaySecretID = 42989  # Secret ID for Workday credentials
@@ -433,31 +461,6 @@ function Format-PhoneNumber {
             return $null
         }
     }
-}
-
-function Get-SecretServerSecretDetails {
-    [CmdletBinding()]
-    param(
-        [Parameter(Mandatory=$true)]
-        [int]$SecretID,
-        [Parameter(Mandatory=$false)]
-        [string]$SecretServerName = 'creds.gianteagle.com',
-        [switch]$TLS12
-    )
-
-    if ($TLS12) {
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-    }
-
-    $BaseURL = "https://$SecretServerName/SecretServer/winauthwebservices/api/v1/secrets"
-    $Arglist = @{
-        Uri = "$BaseURL/$SecretID"
-        UseDefaultCredentials = $true
-    }
-
-    Write-Log "Retrieving secret details from Secret Server..."
-    $SecretDetails = Invoke-RestMethod @Arglist
-    return $SecretDetails
 }
 
 function Get-GraphToken {
